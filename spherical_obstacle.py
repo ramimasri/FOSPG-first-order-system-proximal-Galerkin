@@ -1,3 +1,9 @@
+"""
+Sample runs: python spherical_obstacle.py --refine =4 --order =2 --linearize =0 
+Description: This is example 7.5 in the paper, it is taken from
+            Keith and Surowiec, 2024 https://link.springer.com/article/10.1007/s10208-024-09681-8
+"""
+
 from ngsolve import *
 from netgen.geom2d import SplineGeometry
 from netgen.meshing import MeshingParameters
@@ -9,8 +15,6 @@ import sys
 import numpy as np 
 import scipy as sp 
 import csv 
-
-# python circle.py --refine=2 --order=1 --linearize=0
 
 # Create a parser object
 parser = argparse.ArgumentParser(description='FEM inputs')
