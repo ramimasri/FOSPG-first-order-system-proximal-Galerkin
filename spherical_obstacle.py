@@ -1,5 +1,5 @@
 """
-Sample runs: python spherical_obstacle.py --refine =4 --order =2 --linearize =0 
+Sample runs: python spherical_obstacle.py --refine=4 --order=2 --linearize=0 
 Description: This is example 7.5 in the paper, it is taken from
             Keith and Surowiec, 2024 https://link.springer.com/article/10.1007/s10208-024-09681-8
 """
