@@ -13,7 +13,7 @@ import netgen.gui
 import os
 
 # Create a parser object
-parser = argparse.ArgumentParser(description="FEM inputs")
+parser = argparse.ArgumentParser(description="inputs:refine level and order")
 # Add arguments
 parser.add_argument("--refine", type=int, default=1, help="Set the refinement value (default: 1)")
 parser.add_argument("--order", type=int, default=1, help="Set the order value (default: 1)")
@@ -38,8 +38,8 @@ maxit = 1000
 maxNewton = 400
 maxerr = 1e-06  # tolerance for the Newton solver
 # stabilization parameters
-eps_1 = 1e-01
-eps_2 = 1e-01
+eps_1 = 0.0
+eps_2 = 0.01
 # Newton's damp factor, the default is 1
 dampfactor = 1.0
 
