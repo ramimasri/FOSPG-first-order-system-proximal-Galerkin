@@ -43,7 +43,6 @@ def prox_hm(
     eps_2=0.01,
     dampfactor=1,
     save_directory="",
-    obstacle=0.0,
     u_ex=0.0,
     flux=0.0,
     adaptive=False,
@@ -82,7 +81,7 @@ def prox_hm(
     print(f"eps_1 is {eps_1} and eps_2 is {eps_2}")
     if order == 0:
         epsilon = eps_1 * h ** (order + 1)
-        a += (u * psi - U(phi) * psi - obstacle * psi + (phi - phih0) / alpha * v) * dx
+        a += (u * psi - U(phi) * psi  + (phi - phih0) / alpha * v) * dx
         a += -epsilon * phi * psi * dx
     # stabilization
     elif order == 1:
@@ -94,13 +93,13 @@ def prox_hm(
         weights = [1 / 40, 1 / 40, 1 / 40, 1 / 15, 1 / 15, 1 / 15, 9 / 40]
         ir = IntegrationRule(points=points, weights=weights)
 
-        a += (u * psi - U(phi) * psi - obstacle * psi + (phi - phih0) / alpha * v) * dx(intrules={TRIG: ir})
+        a += (u * psi - U(phi) * psi  + (phi - phih0) / alpha * v) * dx(intrules={TRIG: ir})
         a += -epsilon_1 * phi * psi * dx(intrules={TRIG: ir})
         a += -epsilon_2 * grad(phi) * grad(psi) * dx(intrules={TRIG: ir})
     else:
         epsilon_1 = eps_1 * h ** (order + 1)
         epsilon_2 = eps_2 * h ** (order + 1)
-        a += (u * psi - U(phi) * psi - obstacle * psi + (phi - phih0) / alpha * v) * dx
+        a += (u * psi - U(phi) * psi  + (phi - phih0) / alpha * v) * dx
         a += -epsilon_1 * phi * psi * dx
         a += -epsilon_2 * grad(phi) * grad(psi) * dx
 
@@ -129,7 +128,7 @@ def prox_hm(
                 if not os.path.exists(save_directory):
                     os.makedirs(save_directory)
                 mode = "w" if iter == 1 else "a"
-                err_uex = sqrt(Integrate((u_ex - U(phih) - obstacle) ** 2, mesh))
+                err_uex = sqrt(Integrate((u_ex - U(phih)) ** 2, mesh))
                 err_qex = sqrt(Integrate((qh + flux) ** 2, mesh))
                 with open(f"{save_directory}/solver{mesh_size:.3e}.csv", mode=mode, newline="") as file:
                     writer = csv.writer(file)
