@@ -120,16 +120,16 @@ def solver(refine, order, U,eps_1, eps_2):
 
 if __name__ == "__main__":
 
-    visualize = True        
-    rates     = False            
+    visualize = False         
+    rates     = True            
       
     results =[] 
    
     if visualize: 
          
         eps_1 = 0.0 
-        eps_2 = 1e-04
-        mesh, qh_pg, uh_pg, phih, err_PG = solver(refine, order, U3, eps_1, eps_2)
+        eps_2 = 1e-05
+        mesh, qh_pg, uh_pg, phih, err_PG = solver(refine, order, U4, eps_1, eps_2)
 
         err_qh, err_pg, err_pg2 = err_PG 
         print("LVL: %1d prg err q_h: %.6e, err primal:%.6e, err latent %.6e"%(refine, err_qh, err_pg, err_pg2))
@@ -139,7 +139,7 @@ if __name__ == "__main__":
         conserv = GridFunction(L2(mesh, order= 0)) 
         conserv.vec.FV().NumPy()[:] = elconv    
 
-        vtk = VTKOutput(mesh,  coefs=[uh_pg , U3(phih), conserv], names= ["uh_pg", "uh_latent","conserv"], 
+        vtk = VTKOutput(mesh,  coefs=[uh_pg , U4(phih), conserv], names= ["uh_pg", "uh_latent","conserv"], 
          subdivision=order, filename="data/spherical_obstacle"+str(order)+"r"+str(refine))
         vtk.Do()
 
@@ -156,24 +156,24 @@ if __name__ == "__main__":
     
         mesh_sizes = [] 
         eps_1 = 0.0 
-        eps_2 = 0.0
+        eps_2 = 2e-04
         for refine in refine_levels:
             print(f"LVL {refine}, order {order}")
 
-            mesh, qh_pg, uh_pg, phih, err_PG = solver(refine, order, U3,eps_1, eps_2)
+            mesh, qh_pg, uh_pg, phih, err_PG = solver(refine, order, U4,eps_1, eps_2)
             # get the mesh size 
             h = specialcf.mesh_size 
             h_elem = GridFunction(L2(mesh, order = 0))
             h_elem.Set(h)
             mesh_sizes.append(max(h_elem.vec.FV().NumPy()[:]))
 
-            err_qh, err_pg, err_pg2, err_pg2_proj = err_PG 
+            err_qh, err_pg, err_pg2 = err_PG 
             errors_flux.append(err_qh)
             errors_pg.append(err_pg)
             errors_pg2.append(err_pg2)
-            print("LVL: %1d prg err q_h: %.6e, err primal:%.6e, err latent %.6e"%(refine, err_qh, err_pg, err_pg2,err_pg2_proj))
+            print("LVL: %1d prg err q_h: %.6e, err primal:%.6e, err latent %.6e"%(refine, err_qh, err_pg, err_pg2))
 
-            Draw(obstacle + U3(phih), mesh, "latent")
+            Draw(obstacle + U4(phih), mesh, "latent")
             input("?")
         
         npy_file_path = os.path.join(save_directory, f'meshsize_errors_{order}.npy')
